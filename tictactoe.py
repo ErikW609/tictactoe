@@ -40,12 +40,12 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    act = []
+    act = set()
 
     for row in range(0,3):
         for column in range(0,3):
             if board[row][column] == EMPTY:
-                act.append((row,column))
+                act.add((row,column))
 
     return act
 
@@ -146,15 +146,19 @@ def minimax(board):
 
     if player(board) == X:
         play = 1
+        opp = 'O'
     if player(board) == O:
         play = -1
+        opp = 'X'
 
     for move in action:
         board_copy = copy.deepcopy(board)
         new_board = result(board_copy,move)
         if utility(new_board) == play:
             return move
-
+        board_copy[move[0]][move[1]] = opp
+        if utility(board_copy) == play * -1:
+            return move
 
     for col in range(0,3):
         for row in range(0,3):
