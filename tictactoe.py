@@ -151,6 +151,11 @@ def minimax(board):
         play = -1
         opp = 'X'
 
+    score = 0
+
+    special_row = []
+    special_column = []
+
     for move in action:
         board_copy = copy.deepcopy(board)
         new_board = result(board_copy,move)
@@ -159,6 +164,51 @@ def minimax(board):
         board_copy[move[0]][move[1]] = opp
         if utility(board_copy) == play * -1:
             return move
+        
+    for move in action:
+        for column in range(0,3):
+            if new_board[move[0]][column] == player(board):
+                score += 1
+            if new_board[move[0]][column] == opp:
+                score -= 1
+        for row in range(0,3):
+            if new_board[row][move[1]] == player(board):
+                score += 1
+            if new_board[row][move[1]] == opp:
+                score -= 1
+            
+
+
+
+
+
+
+
+
+
+    # Checks the rows
+    for row in range(0,3):
+        if player(board) in board[row]:
+            if opp not in board[row]:
+                special_row.append(row)
+
+    for column in range(0,3):
+        x = []
+        for row in range(0,3):
+            x.append(board[row][column])
+        if opp not in x:
+            special_column.append(column)
+
+    if special_row != [] and special_column != []:
+        for row in special_row:
+            for column in special_column:
+                if board[row][column] == EMPTY:
+                    return (row,column)
+
+    # if special_row != []:
+    #     for n in range(0,3):
+            
+
 
     for col in range(0,3):
         for row in range(0,3):
