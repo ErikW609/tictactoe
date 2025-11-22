@@ -57,6 +57,9 @@ def result(board, action):
     row = action[0]
     column = action[1]
 
+    if board[row][column] != EMPTY:
+        raise 'Illegal move!'
+
     new_board = copy.deepcopy(board)
 
     new_board[row][column] = player(board)
