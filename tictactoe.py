@@ -59,6 +59,10 @@ def result(board, action):
 
     if board[row][column] != EMPTY:
         raise 'Illegal move!'
+    if row < 0 or column < 0:
+        raise 'Illegal move!'
+    if row > 2 or column > 2:
+        raise 'Illegal move!'
 
     new_board = copy.deepcopy(board)
 
