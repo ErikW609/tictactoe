@@ -47,7 +47,7 @@ def actions(board):
     for row in range(0, 3):
         for column in range(0, 3):
             if board[row][column] == EMPTY:
-                act.add((row,column))
+                act.add((row, column))
 
     return act
 
@@ -184,5 +184,4 @@ def find_minimax(board):
                 if v == -1:
                     return v, opt_move
         return v, opt_move
-
 
