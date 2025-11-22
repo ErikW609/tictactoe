@@ -57,7 +57,7 @@ def result(board, action):
     row = action[0]
     column = action[1]
 
-    new_board = board.copy()
+    new_board = copy.deepcopy(board)
 
     new_board[row][column] = player(board)
 
@@ -131,92 +131,50 @@ def utility(board):
             return 1
         elif board[1][1] == O:
             return -1
-    elif terminal(board):
-        return 0
     else:
-        return None
+        return 0
 
 
 def minimax(board):
+    _, move = find_minimax(board)
+    return move
+
+def find_minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-
-    action = actions(board)
-
     if player(board) == X:
-        play = 1
-        opp = 'O'
-    if player(board) == O:
-        play = -1
-        opp = 'X'
-
-    score = 0
-
-    special_row = []
-    special_column = []
-
-    for move in action:
-        board_copy = copy.deepcopy(board)
-        new_board = result(board_copy,move)
-        if utility(new_board) == play:
-            return move
-        board_copy[move[0]][move[1]] = opp
-        if utility(board_copy) == play * -1:
-            return move
-        
-    for move in action:
-        for column in range(0,3):
-            if new_board[move[0]][column] == player(board):
-                score += 1
-            if new_board[move[0]][column] == opp:
-                score -= 1
-        for row in range(0,3):
-            if new_board[row][move[1]] == player(board):
-                score += 1
-            if new_board[row][move[1]] == opp:
-                score -= 1
-            
-
-
-
-
-
-
-
-
-
-    # Checks the rows
-    for row in range(0,3):
-        if player(board) in board[row]:
-            if opp not in board[row]:
-                special_row.append(row)
-
-    for column in range(0,3):
-        x = []
-        for row in range(0,3):
-            x.append(board[row][column])
-        if opp not in x:
-            special_column.append(column)
-
-    if special_row != [] and special_column != []:
-        for row in special_row:
-            for column in special_column:
-                if board[row][column] == EMPTY:
-                    return (row,column)
-
-    # if special_row != []:
-    #     for n in range(0,3):
-            
-
-
-    for col in range(0,3):
-        for row in range(0,3):
-            if board[row][col] == EMPTY:
-                return (row, col)
+        if terminal(board):
+            return utility(board), None
+        v = -100
+        opt_move = None
+        for move in actions(board):
+            v_loc, new_move = find_minimax(result(board, move))
+            if v < v_loc:
+                v = v_loc
+                opt_move = move
+                if v == 1:
+                    return v, opt_move
+        return v, opt_move
     
-    return (0,0)
+    if player(board) == O:
+        if terminal(board):
+            return utility(board), None
+        v = 100
+        opt_move = None
+        for move in actions(board):
+            v_loc, new_move = find_minimax(result(board, move))
+            if v > v_loc:
+                v = v_loc
+                opt_move = move
+                if v == -1:
+                    return v, opt_move
+        return v, opt_move
 
 
+if __name__ == "__main__":
+    test_board=[[ 'X', 'O', EMPTY], [ EMPTY, 'X', EMPTY], [EMPTY, EMPTY, 'O']]
+    x=minimax(test_board)
+    print(x)
 
 
