@@ -22,10 +22,11 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
+    # Determines the turn player
     player1 = 0
     player2 = 0
-    for row in range(0,3):
-        for column in range(0,3):
+    for row in range(0, 3):
+        for column in range(0, 3):
             if board[row][column] == X:
                 player1 += 1
             if board[row][column] == O:
@@ -40,10 +41,11 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
+    # Return a set of actions
     act = set()
 
-    for row in range(0,3):
-        for column in range(0,3):
+    for row in range(0, 3):
+        for column in range(0, 3):
             if board[row][column] == EMPTY:
                 act.add((row,column))
 
@@ -54,9 +56,11 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
+    # Defines the rows and column
     row = action[0]
     column = action[1]
 
+    # Stops for illegal moves
     if board[row][column] != EMPTY:
         raise 'Illegal move!'
     if row < 0 or column < 0:
@@ -64,6 +68,7 @@ def result(board, action):
     if row > 2 or column > 2:
         raise 'Illegal move!'
 
+    # Creates a new board
     new_board = copy.deepcopy(board)
 
     new_board[row][column] = player(board)
@@ -87,7 +92,7 @@ def terminal(board):
     Returns True if game is over, False otherwise.
     """
 
-    for n in range(0,3):
+    for n in range(0, 3):
         # Checks for rows
         if board[n][0] == board[n][1] and board[n][1] == board[n][2] and board[n][0] != None:
             return True
@@ -114,7 +119,7 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
 
-    for n in range(0,3):
+    for n in range(0, 3):
         # Checks for rows
         if board[n][0] == board[n][1] and board[n][1] == board[n][2]:
             if board[n][0] == X:
@@ -146,10 +151,12 @@ def minimax(board):
     _, move = find_minimax(board)
     return move
 
+
 def find_minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    # Simulates a game to find the best move
     if player(board) == X:
         if terminal(board):
             return utility(board), None
@@ -177,11 +184,5 @@ def find_minimax(board):
                 if v == -1:
                     return v, opt_move
         return v, opt_move
-
-
-if __name__ == "__main__":
-    test_board=[[ 'X', 'O', EMPTY], [ EMPTY, 'X', EMPTY], [EMPTY, EMPTY, 'O']]
-    x=minimax(test_board)
-    print(x)
 
 
